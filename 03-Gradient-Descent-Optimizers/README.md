@@ -1,51 +1,42 @@
-# 🚀 Linear Regression with Advanced Optimizers (From Scratch)
 
-A complete from-scratch implementation of **Linear Regression** using only NumPy, featuring modern optimization algorithms used in deep learning:
+This image contains:
 
-- Momentum
-- RMSprop
-- Adam
-
-All implemented without any machine learning libraries.
+- Data points (true values)
+- Learned regression line
+- Cost function curve over epochs
 
 ---
 
 # 📌 Overview
 
-This project demonstrates how Linear Regression can be trained using different optimization techniques instead of standard Gradient Descent.
+Traditional Gradient Descent often suffers from:
 
-It focuses on:
+- Slow convergence  
+- Oscillations  
+- Poor performance on noisy or large datasets  
 
-- Understanding optimization mechanics
-- Comparing optimizer performance
-- Visualizing learning behavior
+This project demonstrates how modern optimizers solve these problems by improving:
 
----
-
-# ⚙️ Features
-
-- Pure NumPy implementation (no ML libraries)
-- Mini-batch Gradient Descent
-- Momentum optimizer
-- RMSprop optimizer
-- Adam optimizer with bias correction
-- Early stopping for efficient training
-- Real-time cost tracking
-- Visualization of regression line and loss curve
-- Interactive CLI input
+- Stability  
+- Speed  
+- Convergence quality  
 
 ---
 
-# 📐 Mathematical Background
+# 📐 Mathematical Formulation
+
+## Linear Model
+
+\[
+\hat{y} = wx + b
+\]
+
+---
 
 ## Cost Function (MSE)
 
 \[
 J(w,b) = \frac{1}{2m} \sum (\hat{y} - y)^2
-\]
-
-\[
-\hat{y} = wx + b
 \]
 
 ---
@@ -54,63 +45,81 @@ J(w,b) = \frac{1}{2m} \sum (\hat{y} - y)^2
 
 \[
 dw = \frac{1}{m} \sum (\hat{y} - y)x
-\]
-
-\[
+\quad,\quad
 db = \frac{1}{m} \sum (\hat{y} - y)
 \]
 
 ---
 
-## Momentum
+## Optimizers
+
+### 🔹 Momentum
+Smooths updates using velocity:
 
 \[
-v = \beta v + (1 - \beta) g
-\]
-
-\[
-w = w - \eta v
-\]
-
----
-
-## RMSprop
-
-\[
-v = \beta v + (1 - \beta) g^2
-\]
-
-\[
-w = w - \frac{\eta}{\sqrt{v} + \epsilon} g
+v = \beta v + (1-\beta)g
 \]
 
 ---
 
-## Adam Optimizer
-
-Combines Momentum + RMSprop with bias correction:
+### 🔹 RMSprop
+Adaptive learning rate per parameter:
 
 \[
-w = w - \frac{\eta}{\sqrt{\hat{v}} + \epsilon} \hat{m}
+v = \beta v + (1-\beta)g^2
 \]
 
 ---
 
-# 🏗️ Code Structure
+### 🔹 Adam
+Combination of Momentum + RMSprop:
 
-- `__init__` → initialize hyperparameters  
-- `fit_momentum()` → training using Momentum  
-- `fit_rmsprop()` → training using RMSprop  
-- `fit_adam()` → training using Adam  
-- `predict()` → make predictions  
-- `plot()` → visualization  
-- `run_model()` → full pipeline execution  
+- First moment (mean)
+- Second moment (variance)
+- Bias correction
 
 ---
 
-# 🚀 Installation
+# 📊 Visualization (Core Feature)
 
-## 1. Clone repository
+The model generates a **2-panel plot**:
+
+### 📍 Left Plot:
+- Original data points
+- Learned regression line
+
+### 📍 Right Plot:
+- Cost function vs Epochs
+- Convergence behavior
+
+---
+
+# ✨ Features
+
+- 🔥 Pure NumPy implementation
+- ⚙️ 3 Optimizers (Momentum / RMSprop / Adam)
+- 📦 Mini-batch Gradient Descent
+- ⛔ Early Stopping
+- 📊 Full training visualization
+- 💻 Interactive CLI input
+- 📈 Cost tracking per epoch
+
+---
+
+# 🏗️ Project Structure
+
+- `fit_momentum()` → Momentum training  
+- `fit_rmsprop()` → RMSprop training  
+- `fit_adam()` → Adam training  
+- `predict()` → inference  
+- `plot()` → visualization dashboard  
+- `run_model()` → full pipeline  
+
+---
+
+# 🚀 Installation & Run
+
+## Clone repo
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
-cd YOUR_REPO_NAME
+git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
+cd YOUR_REPO
