@@ -1,142 +1,136 @@
-# 🚀 Advanced Linear Regression with Adaptive Optimizers From Scratch
+# 🚀 Advanced Linear Regression with Adaptive Optimizers (From Scratch)
 
-[![Python Version](https://img.shields.io/badge/Python-3.8%2B-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![NumPy](https://img.shields.io/badge/NumPy-1.20%2B-darkgreen.svg?style=for-the-badge&logo=numpy&logoColor=white)](https://numpy.org/)
-[![Matplotlib](https://img.shields.io/badge/Matplotlib-3.4%2B-orange.svg?style=for-the-badge&logo=python&logoColor=white)](https://matplotlib.org/)
-[![Framework](https://img.shields.io/badge/From--Scratch-No--Frameworks-red.svg?style=for-the-badge)](https://github.com/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge&logo=python)](https://www.python.org/)
+[![NumPy](https://img.shields.io/badge/NumPy-1.20%2B-darkgreen?style=for-the-badge&logo=numpy)](https://numpy.org/)
+[![Matplotlib](https://img.shields.io/badge/Matplotlib-3.4%2B-orange?style=for-the-badge)](https://matplotlib.org/)
+[![From Scratch](https://img.shields.io/badge/ML-From_Scratch-red?style=for-the-badge)](https://github.com/)
+[![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
 
-تطبيق برمجى متكامل واحترافي لنموذج **الانحدار الخطي (Linear Regression)** تم بناؤه من الصفر تماماً باستخدام مكتبة **NumPy** فقط دون الاعتماد على أي مكتبات تعلم آلة جاهزة (مثل Scikit-Learn). 
+A fully from-scratch implementation of **Linear Regression** using only **NumPy**, featuring modern optimization algorithms used in deep learning:
 
-يركز هذا المستودع على تقديم مقارنة تطبيقية ورياضية عميقة بين أشهر خوارزميات المحسنات الذكية (**Momentum**, **RMSprop**, **Adam**) عند دمجها مع آلية **Mini-batch Gradient Descent** لتسريع التخطي والوصول للحل الأمثل (Global Minimum).
-
----
-
-## 📌 جدول المحتويات / Table of Contents
-- [📖 نبذة عن المشروع / Overview](#-نبذة-عن-المشروع--overview)
-- [📐 الشرح الرياضي والمعادلات / Mathematical Framework](#-الشرح-الرياضي-والمعادلات--mathematical-framework)
-  - [1. دالة التكلفة والغراديان / Cost & Gradients](#1-دالة-التكلفة-والغراديان--cost--gradients)
-  - [2. محسن الزخم / Momentum Optimizer](#2-محسن-الزخم--momentum-optimizer)
-  - [3. محسن RMSprop Optimizer](#3-محسن-rmsprop-optimizer)
-  - [4. محسن Adam Optimizer](#4-محسن-adam-optimizer)
-- [⚡ مقارنة سريعة بين المحسنات / Optimizers Comparison](#-مقارنة-سريعة-بين-المحسنات--optimizers-comparison)
-- [✨ المميزات البرمجية / Key Features](#-المميزات-البرمجية--key-features)
-- [🚀 دليل التشغيل والتنصيب / Installation & Quick Start](#-دليل-التشغيل-والتنصيب--installation--quick-start)
-- [📊 المخرجات والرسوم البيانية / Interactive Dashboard & Outputs](#-المخرجات-والرسوم-البيانية--interactive-dashboard--outputs)
-- [⚙️ الأوزان الفائقة الافتراضية / Hyperparameter Configurations](#%EF%B8%8F-الأوزان-الفائقة-الافتراضية--hyperparameter-configurations)
+- Momentum  
+- RMSprop  
+- Adam  
 
 ---
 
-## 📖 نبذة عن المشروع / Overview
-في المشاريع الحقيقية والشبكات العصبية العميقة، يعاني الانحدار التدريجي التقليدي (Gradient Descent) من البطء الشديد والتذبذب عند التعامل مع البيانات الكبيرة أو الأسطح الرياضية المعقدة. 
+# 📊 Visualization (Core Feature)
 
-يوفر هذا المشروع فئة برمجية (Class) مرنة ومكتوبة بأسلوب **Object-Oriented Programming (OOP)** تتيح للمطورين والباحثين فهم كيفية عمل خوارزميات ضبط معدل التعلم المتكيف (Adaptive Learning Rate) برمجياً ورؤية تأثيرها المباشر على سرعة التقارب (Convergence).
+This project generates a complete **training dashboard** automatically:
 
----
+### 📌 1. Regression Fit
+- Data points (ground truth)
+- Learned regression line
 
-## 📐 الشرح الرياضي والمعادلات / Mathematical Framework
+### 📌 2. Loss Curve
+- Cost vs Epochs
+- Convergence behavior
 
-### 1. دالة التكلفة والغراديان / Cost & Gradients
-الهدف هو تقليل دالة الخطأ **متوسط مربعات الخطأ الموزون (MSE Cost Function)**:
+### 🖼 Output Example
 
-$$J(w, b) = \frac{1}{2m} \sum_{i=1}^{m} \left( \hat{y}^{(i)} - y^{(i)} \right)^2$$
+The model saves:
 
-حيث يتم حساب التوقع لكل نقطة عبر المعادلة الخطية:  
-$$\hat{y}^{(i)} = w \cdot x^{(i)} + b$$
-
-يتم حساب المشتقات الجزئية (Gradients) لكل دفعة بيانات (Mini-batch) لتوجيه التحديث:
-$$\frac{\partial J}{\partial w} = dw = \frac{1}{m_{batch}} \sum_{i=1}^{m_{batch}} (\hat{y}^{(i)} - y^{(i)}) \cdot x^{(i)}$$
-$$\frac{\partial J}{\partial b} = db = \frac{1}{m_{batch}} \sum_{i=1}^{m_{batch}} (\hat{y}^{(i)} - y^{(i)})$$
-
----
-
-### 2. محسن الزخم / Momentum Optimizer
-يعتمد على محاكاة حركة الكرة المتدحرجة، حيث يجمع العزم من التحديثات السابقة لتسريع الحركة في الاتجاه الصحيح وتقليل الاهتزازات العشوائية الحادة.
-
-* **تحديث السرعة المتجهة (Velocity Accumulation):**
-  $$v_{dw} = \beta_1 \cdot v_{dw} + (1 - \beta_1) \cdot dw$$
-  $$v_{db} = \beta_1 \cdot v_{db} + (1 - \beta_1) \cdot db$$
-
-* **تحديث الأوزان والإنحياز:**
-  $$w = w - \eta \cdot v_{dw}, \quad b = b - \eta \cdot v_{db}$$
+Which includes:
+- Regression line
+- Training data distribution
+- Loss curve over time
 
 ---
 
-### 3. محسن RMSprop Optimizer
-يقوم بتعديل معدل التعلم تلقائياً لكل متغير على حدة عبر قسمة الغراديان على الجذر التربيعي للمتوسط المتحرك للمربعات السابقة. هذا يقلل من الخطوات في الاتجاهات ذات التذبذب العالي.
+# 📌 Overview
 
-* **حساب التباين المتحرك (Moving Average of Squared Gradients):**
-  $$v_{dw} = \beta_2 \cdot v_{dw} + (1 - \beta_2) \cdot dw^2$$
-  $$v_{db} = \beta_2 \cdot v_{db} + (1 - \beta_2) \cdot db^2$$
+Gradient Descent alone often struggles with:
 
-* **تحديث الأوزان والإنحياز:**
-  $$w = w - \frac{\eta}{\sqrt{v_{dw}} + \epsilon} \cdot dw, \quad b = b - \frac{\eta}{\sqrt{v_{db}} + \epsilon} \cdot db$$
+- Slow convergence
+- Oscillations
+- Sensitivity to learning rate
 
----
+This project demonstrates how adaptive optimizers solve these issues by improving:
 
-### 4. محسن Adam Optimizer
-يعد المحسن القياسي الأكثر كفاءة في العالم اليوم؛ فهو يدمج بين مزايا العزم الأول (Momentum) والعزم الثاني (RMSprop) مع تطبيق خطوة **تصحيح الانحياز (Bias Correction)** للتحكم في دقة البدايات الناتجة عن تصفير المصفوفات.
-
-* **العزم الأول والثاني (First & Second Moments):**
-  $$v_{1} = \beta_1 \cdot v_{1} + (1 - \beta_1) \cdot g, \quad v_{2} = \beta_2 \cdot v_{2} + (1 - \beta_2) \cdot g^2$$
-
-* **تصحيح الانحياز المعتمد على الخطوة الزمنية $t$:**
-  $$\hat{v}_{dw1} = \frac{v_{dw1}}{1 - \beta_1^t}, \quad \hat{v}_{db1} = \frac{v_{db1}}{1 - \beta_1^t}$$
-  $$\hat{v}_{dw2} = \frac{v_{dw2}}{1 - \beta_2^t}, \quad \hat{v}_{db2} = \frac{v_{db2}}{1 - \beta_2^t}$$
-
-* **التحديث النهائي للمتغيرات:**
-  $$w = w - \frac{\eta}{\sqrt{\hat{v}_{dw2}} + \epsilon} \cdot \hat{v}_{dw1}, \quad b = b - \frac{\eta}{\sqrt{\hat{v}_{db2}} + \epsilon} \cdot \hat{v}_{db1}$$
+- Stability
+- Speed
+- Convergence quality
 
 ---
 
-## ⚡ مقارنة سريعة بين المحسنات / Optimizers Comparison
+# 📐 Mathematical Framework
 
-| المحسن (Optimizer) | الميزة الأساسية | التكيف مع المعاملات | معالجة التذبذب |
-| :--- | :--- | :--- | :--- |
-| **Momentum** | تراكم السرعة بالاتجاه الصحيح | ثابت لجميع المتغيرات | ممتاز |
-| **RMSprop** | يمنع انفجار/تلاشي معدل التعلم | متكيف (Adaptive) | جيد جداً |
-| **Adam** | يجمع بين العزم والتباين + تصحيح الانحياز | متكيف وذكي جداً | الأفضل كفاءة |
+## Linear Model
+\[
+\hat{y} = wx + b
+\]
+
+## Cost Function (MSE)
+\[
+J(w,b) = \frac{1}{2m} \sum (\hat{y} - y)^2
+\]
+
+## Gradients
+\[
+dw = \frac{1}{m} \sum (\hat{y} - y)x
+\quad,\quad
+db = \frac{1}{m} \sum (\hat{y} - y)
+\]
 
 ---
 
-## ✨ المميزات البرمجية / Key Features
-- **Pure OOP Architecture:** كود نظيف، منظم، وقابل للتوسيع بالكامل لفصل العمليات الرياضية.
-- **Dynamic Mini-batch Scaling:** إمكانية التحكم الكامل بحجم دفعة البيانات (Batch Size) من خلال الواجهة.
-- **Smart Early Stopping:** حلقة التدريب ذكية وتتوقف تلقائياً بمجرد وصول قيمة دالة الخطأ لنسبة مستهدفة أقل من `1e-5` لتوفير موارد المعالجة وتجنب الـ Overfitting.
-- **Auto-generated Dashboard:** يقوم الكود تلقائياً بحفظ لوحة بيانات متكاملة بصيغة `output.png` بدقة عالية وثيم داكن عصري.
+## ⚙️ Optimizers
+
+### 🔹 Momentum
+\[
+v = \beta v + (1 - \beta) g
+\]
+
+### 🔹 RMSprop
+\[
+v = \beta v + (1 - \beta) g^2
+\]
+
+### 🔹 Adam
+Combines:
+- Momentum (1st moment)
+- RMSprop (2nd moment)
+- Bias correction
 
 ---
 
-## 🚀 دليل التشغيل والتنصيب / Installation & Quick Start
+# ⚖️ Optimizers Comparison
 
-### 1. استنساخ المستودع وتثبيت المكتبات
+| Optimizer | Strength | Adaptivity | Stability |
+|----------|----------|------------|-----------|
+| Momentum | Faster convergence | Low | High |
+| RMSprop  | Adaptive learning rate | Medium | Very High |
+| Adam     | Best overall performance | High | Excellent |
+
+---
+
+# ✨ Key Features
+
+- Pure NumPy implementation (no ML frameworks)
+- Mini-batch Gradient Descent
+- 3 Optimizers (Momentum / RMSprop / Adam)
+- Smart Early Stopping
+- Full training pipeline (fit → predict → plot)
+- Automatic visualization dashboard
+- Cost tracking per epoch
+- Clean OOP design
+
+---
+
+# 🏗️ Project Structure
+
+- `fit_momentum()` → Momentum training  
+- `fit_rmsprop()` → RMSprop training  
+- `fit_adam()` → Adam training  
+- `predict()` → inference  
+- `plot()` → visualization dashboard  
+- `run_model()` → full pipeline  
+
+---
+
+# 🚀 Installation
+
 ```bash
-# Clone the repository
-git clone [https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git)
-cd YOUR_REPO_NAME
-
-# Install dependencies
+git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
+cd YOUR_REPO
 pip install numpy matplotlib
-
-📋 مثال للمدخلات التفاعلية بالـ Terminal:
-Enter the number of data points from n to t separated by comma: 1,2,3,4,5
-Enter the corresponding y values: 3,5,7,9,11
-Enter the new x values for prediction: 6,8,10
-Enter the number of data points for each batch: 2
-Enter the name of optimizer (momentum, rmsprop, adam): adam
-
-📊 المخرجات والرسوم البيانية / Interactive Dashboard & Outputs
-عند اكتمال التدريب، ستظهر لك إحصائيات تفصيلية بالـ Terminal:
-==================================================
-the prediction of model is 
-equation of line is y = 2.0000 * x + 1.0000
-Predictions:
-x = 6  -->  y = 13.00
-x = 8  -->  y = 17.00
-x = 10  -->  y = 21.00
-==================================================
-final value
-Final w:  2.0000
-Final b:  1.0000
-Final cost:  0.0000
-Training stopped at epoch: 38
