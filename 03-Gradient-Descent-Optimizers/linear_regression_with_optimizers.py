@@ -34,12 +34,13 @@ class linear_regression_model():
                 # Update the parameters
                 self.w=self.w-self.eta*v_dw
                 self.b=self.b-self.eta*v_db
-            # Calculate the cost for the current epoch
-            self.cost_value[i]=0.5*(np.mean((yhat-y_batch)**2))
-            if self.cost_value[i]<1e-5:
-                   self.last_epoch = i
-                   break
-            else:
+            # Calculate the cost for all data points in the current epoch
+            yhat_all = self.w * x + self.b
+            self.cost_value[i] = 0.5 * (np.mean((yhat_all - y) ** 2))
+            if self.cost_value[i] < 1e-5:
+                self.last_epoch = i
+                break
+        else:
               self.last_epoch = self.epochs - 1
 
     # traning the model with RMS prop optimizer
@@ -65,12 +66,14 @@ class linear_regression_model():
                 # Update the parameters
                 self.w=self.w-self.eta*(dw/(np.sqrt(v_dw)+self.epsilon))
                 self.b=self.b-self.eta*(db/(np.sqrt(v_db)+self.epsilon))
+            # Calculate the cost for all data points in the current epoch
+            yhat_all = self.w * x + self.b
             # Calculate the cost for the current epoch
-            self.cost_value[i]=0.5*(np.mean((yhat-y_batch)**2))
-            if self.cost_value[i]<1e-5:
-                  self.last_epoch = i
-                  break
-            else:
+            self.cost_value[i] = 0.5 * (np.mean((yhat_all - y) ** 2))
+            if self.cost_value[i] < 1e-5:
+                self.last_epoch = i
+                break
+        else:
               self.last_epoch = self.epochs - 1
 
     # traning the model with ADAM optimizer
@@ -83,8 +86,10 @@ class linear_regression_model():
         v_db1=0 # velocity for bias
         v_db2=0 # velocity for bias
         #training loop using minibatch gradient descent with momentum
+        t=0
         for i in range(self.epochs):
             for j in range(0, len(x), num):
+                t+=1
                 # Calculate the predictions
                 x_batch = x[j:j+num]  # Select a mini-batch of data
                 y_batch = y[j:j+num]  # Select the corresponding mini-batch of labels
@@ -97,15 +102,22 @@ class linear_regression_model():
                 v_dw2=self.beta2*v_dw2+(1-self.beta2)*dw**2
                 v_db1=self.beta1*v_db1+(1-self.beta1)*db
                 v_db2=self.beta2*v_db2+(1-self.beta2)*db**2
+                # use bias correction
+                v_dw1_corrected=v_dw1/(1-self.beta1**(t))
+                v_dw2_corrected=v_dw2/(1-self.beta2**(t))
+                v_db1_corrected=v_db1/(1-self.beta1**(t))
+                v_db2_corrected=v_db2/(1-self.beta2**(t))
                 # Update the parameters
-                self.w=self.w-self.eta*(v_dw1/(np.sqrt(v_dw2)+self.epsilon))
-                self.b=self.b-self.eta*(v_db1/(np.sqrt(v_db2)+self.epsilon))
+                self.w=self.w-self.eta*(v_dw1_corrected/(np.sqrt(v_dw2_corrected)+self.epsilon))
+                self.b=self.b-self.eta*(v_db1_corrected/(np.sqrt(v_db2_corrected)+self.epsilon))
+            # calculate the cost for all data points in the current epoch
+            yhat_all = self.w * x + self.b
             # Calculate the cost for the current epoch
-            self.cost_value[i]=0.5*(np.mean((yhat-y_batch)**2))
+            self.cost_value[i]=0.5*(np.mean((yhat_all-y)**2))
             if self.cost_value[i]<1e-5:
                   self.last_epoch = i
                   break
-            else:
+        else:
               self.last_epoch = self.epochs - 1
 
     #prediction of the model
@@ -187,3 +199,4 @@ new_x=np.array(list(map(int, input("Enter the new x values for prediction: ").sp
 num=int(input("Enter the number of data points for each batch: "))
 name_optimizer=input("Enter the name of optimizer (momentum, rmsprop, adam): ")
 model.run_model(x,y,new_x, name_optimizer,num)
+
