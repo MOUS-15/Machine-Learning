@@ -1,92 +1,92 @@
-# 🐾 Production-Grade Multi-Class Logistic Regression from Scratch
+# 🐾 نموذج الانحدار اللوجستي متعدد الفئات من الصفر (Softmax Regression)
 
 [![Language](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
-[![Framework](https://img.shields.io/badge/NumPy-Pure%20Math-orange.svg)](https://numpy.org/)
-[![Visualization](https://img.shields.io/badge/Matplotlib-Dark%20Theme-green.svg)](https://matplotlib.org/)
+[![Framework](https://img.shields.io/badge/NumPy-%D8%B1%D9%8A%D8%A7%D8%B6%D9%8A%D8%A7%D8%AA%D9%85%D8%AD%D8%B6%D8%A9-orange.svg)](https://numpy.org/)
+[![Visualization](https://img.shields.io/badge/Matplotlib-%D8%A7%D9%84%D9%88%D8%A2%D4%B5%D8%A9%D8%A7%D9%84%D9%85%D8%Bظ%D9%84%D9%85%D8%A9-green.svg)](https://matplotlib.org/)
 
-An exhaustive, industrial-standard documentation and implementation of a **Multinomial Logistic Regression model (Softmax Regression)** built strictly from scratch. This project demonstrates advanced knowledge of vectorized gradient descent, numerical stability practices in machine learning, mathematical data synthesis, and complex 2D decision-boundary evaluation.
-
----
-
-## 📌 Table of Contents
-1. [Project Overview](#-project-overview)
-2. [Theoretical & Mathematical Foundation](#-theoretical--mathematical-foundation)
-3. [Synthetic Data Architecture](#-synthetic-data-architecture)
-4. [Software Design & Architecture](#-software-design--architecture)
-5. [Numerical Stability & Edge Cases](#-numerical-stability--edge-cases)
-6. [Installation & Execution](#-installation--execution)
-7. [Comprehensive Output Examples](#-comprehensive-output-examples)
-8. [Hyperparameter Tuning Guide](#-hyperparameter-tuning-guide)
+توثيق وبرمجة شاملة لنموذج **الانحدار اللوجستي متعدد الفئات (Multinomial Logistic Regression)** تم بناؤه بالكامل من الصفر دون الاعتماد على أي مكتبات تعلم آلي جاهزة. يستعرض هذا المشروع المفاهيم المتقدمة للتحسين الرياضي باستخدام الخوارزميات الموجهة (Vectorized Gradient Descent)، والتعامل مع مشاكل الاستقرار الرقمي (Numerical Stability)، وتوليد البيانات الاصطناعية، ورسم حدود القرار الثنائية الأبعاد (2D Decision Boundaries).
 
 ---
 
-## 🗺️ Project Overview
-
-In multi-class classification problems, mapping continuous multi-dimensional inputs into discrete categorical probabilities is a foundational challenge. This project implements a self-contained pipeline that:
-* Generates a 2-feature synthetic dataset representing three distinct animal classes (**Cats, Dogs, Birds**).
-* Applies a vectorized **Softmax Activation Layer**.
-* Minimizes **Categorical Cross-Entropy Loss** using batch gradient descent.
-* Employs an optimization safety net with a strict mathematical convergence checker (**Early Stopping** via $\epsilon$).
-* Renders a complete spatial classification landscape using automated meshgrid boundary mapping.
+## 📌 جدول المحتويات
+1. [نظرة عامة على المشروع](#-نظرة-عامة-على-المشروع)
+2. [الأساس الرياضي والنظري](#-الأساس-الرياضي-والنظري)
+3. [هندسة وتصميم البيانات الاصطناعية](#-هندسة-وتصميم-البيانات-الاصطناعية)
+4. [البنية البرمجية للمشروع](#-البنية-البرمجية-للمشروع)
+5. [الاستقرار الرقمي ومعالجة الحالات الحرجة](#-الاستقرار-الرقمي-ومعالجة-الحالات-الحرجة)
+6. [التثبيت والتشغيل](#-التثبيت-والتشغيل)
+7. [أمثلة للمخرجات الشاملة](#-أمثلة-للمخرجات-الشاملة)
+8. [دليل ضبط المعاملات الفائقة (Hyperparameters)](#-دليل-ضبط-المعاملات-الفائقة-hyperparameters)
 
 ---
 
-## 📐 Theoretical & Mathematical Foundation
+## 🗺️ نظرة عامة على المشروع
 
-Unlike binary logistic regression which utilizes the Sigmoid function to output a single probability, multi-class classification requires a probability distribution across $C$ target classes.
+في مشاكل التصنيف متعدد الفئات، يعتبر تحويل المدخلات المستمرة إلى احتمالات فئوية محددة تحدياً أساسياً. يقوم هذا المشروع ببناء خط إنتاج (Pipeline) متكامل يقوم بما يلي:
+* توليد بيانات اصطناعية بـميزتين ($X_1, X_2$) لتمثيل ثلاث فئات مختلفة من الحيوانات (**قطط، كلاب، طيور**).
+* تطبيق طبقة تنشيط موجهة باستخدام دالة **Softmax**.
+* تقليل تكلفة دالة **Categorical Cross-Entropy Loss** عبر خوارزمية الانحدار التدريجي للدفعات (Batch Gradient Descent).
+* استخدام آلية التوقف المبكر (**Early Stopping**) بناءً على قيمة التحسن ($\epsilon$) لضمان كفاءة وقت التدريب.
+* رسم خريطة تصنيفية كاملة للمساحة الحسابية باستخدام شبكة إحداثيات (Meshgrid) لعرض حدود القرار بدقة.
 
-### 1. Forward Propagation (The Linear Engine)
-Given an input matrix $X \in \mathbb{R}^{m \times n}$ (where $m$ is the number of samples and $n$ is the number of features including the bias column), and a weight matrix $W \in \mathbb{R}^{n \times C}$ (where $C$ is the number of classes), the raw logit scores matrix $Z$ is computed via matrix multiplication:
+---
+
+## 📐 الأساس الرياضي والنظري
+
+على عكس الانحدار اللوجستي الثنائي الذي يستخدم دالة Sigmoid لإخراج احتمال واحد، يتطلب التصنيف متعدد الفئات توزيعاً احتمالياً عبر $C$ من الفئات المستهدفة.
+
+### 1. الانتشار الأمامي (Forward Propagation)
+بفرض أن مصفوفة المدخلات هي $X \in \mathbb{R}^{m \times n}$ (حيث $m$ عدد العينات، و $n$ عدد الميزات شاملة عمود الانحياز Bias)، ومصفوفة الأوزان هي $W \in \mathbb{R}^{n \times C}$ (حيث $C$ عدد الفئات)، يتم حساب القيم الخام (Logits) عبر الضرب المصفوفي:
 
 $$Z = X \cdot W$$
 
-### 2. Activation Layer (Softmax Function)
-To convert logits into normalized probabilities where $\sum_{j=1}^{C} \hat{y}_{ij} = 1$, we map each element through the Softmax function:
+### 2. طبقة التنشيط (Softmax Function)
+لتحويل القيم الخام $Z$ إلى احتمالات مقننة بحيث يكون مجموع احتمالات الصف الواحد يساوي $1$ ($\sum_{j=1}^{C} \hat{y}_{ij} = 1$)، نمرر كل عنصر عبر دالة Softmax:
 
 $$\hat{y}_{ic} = \sigma(Z)_{ic} = \frac{e^{z_{ic}}}{\sum_{j=1}^{C} e^{z_{ij}}}$$
 
-### 3. Objective Cost Function (Categorical Cross-Entropy)
-To penalize inaccurate predictions, we calculate the average negative log-likelihood across all $m$ samples and $C$ classes:
+### 3. دالة التكلفة (Categorical Cross-Entropy)
+لمعاقبة التوقعات الخاطئة، يتم حساب متوسط اللوغاريتم السلبي للاحتمالات الصحيحة عبر جميع العينات والفئات:
 
 $$J(W) = -\frac{1}{m} \sum_{i=1}^{m} \sum_{c=1}^{C} y_{ic} \log(\hat{y}_{ic})$$
 
-Where $y_{ic}$ is a binary indicator ($0$ or $1$) from the One-Hot encoded true label matrix.
+*حيث $y_{ic}$ هو المؤشر الثنائي ($0$ أو $1$) القادم من مصفوفة التشفير الأحادي (One-Hot Encoding).*
 
-### 4. Vectorized Gradient Descent (The Backpropagation)
-The partial derivative of the cost function with respect to the weight matrix $W$ yields an incredibly elegant vectorized formulation:
+### 4. حساب المشتقات وتحديث الأوزان (Gradient Descent)
+المشتقة الجزئية لدالة التكلفة بالنسبة لمصفوفة الأوزان $W$ تنتج صيغة رياضية موجهة وموجزة للغاية:
 
 $$\frac{\partial J}{\partial W} = \frac{1}{m} X^T \cdot (\hat{y} - y)$$
 
-The weights are then updated iteratively by shifting opposite to the gradient scaled by the learning rate ($\eta$):
+يتم تحديث الأوزان في كل دورة تدريبية بالتحرك عكس اتجاه الميل بمقدار يتناسب مع معدل التعلم ($\eta$):
 
 $$W := W - \eta \cdot \frac{\partial J}{\partial W}$$
 
 ---
 
-## 📊 Synthetic Data Architecture
+## 📊 هندسة وتصميم البيانات الاصطناعية
 
-The script mathematically synthesizes three distinct clusters in a 2D space ($X_1, X_2$) representing custom bounding characteristics. Each cluster is uniformly distributed but strategically separated to simulate clean decision fields:
+يقوم الكود بتوليد ثلاث مجموعات من البيانات في مساحة ثنائية الأبعاد ($X_1, X_2$) بشكل هندسي مدروس بحيث تكون المجموعات مفصولة خطياً ولكن بينها تداخل طفيف لاختبار قوة النموذج:
 
-| Class Index | Label Name | $X_1$ Range (Feature 1) | $X_2$ Range (Feature 2) | Target Matrix Vector (One-Hot) |
+| مؤشر الفئة | اسم الكلاس | مدى الميزة الأولى $X_1$ | مدى الميزة الثانية $X_2$ | مصفوفة التشفير الأحادي (One-Hot) |
 | :--- | :--- | :--- | :--- | :--- |
-| **0** | **Cat** | $[1, 9)$ | $[1, 9)$ | `[1, 0, 0]` |
-| **1** | **Dog** | $[7, 16)$ | $[7, 16)$ | `[0, 1, 0]` |
-| **2** | **Bird** | $[15, 23)$ | $[15, 23)$ | `[0, 0, 1]` |
+| **0** | **قطة (Cat)** | $[1, 9)$ | $[1, 9)$ | `[1, 0, 0]` |
+| **1** | **كلب (Dog)** | $[7, 16)$ | $[7, 16)$ | `[0, 1, 0]` |
+| **2** | **طائر (Bird)** | $[15, 23)$ | $[15, 23)$ | `[0, 0, 1]` |
 
-*Note: A bias column containing solid $1$s is seamlessly appended as the 3rd feature to allow the hyperplane to shift away from the origin.*
+*ملاحظة: يتم دمج عمود الانحياز (Bias) المكون من الرقم $1$ تلقائياً كميزة ثالثة لزيادة مرونة حركة خطوط القرار بعيداً عن نقطة الأصل.*
 
 ---
 
-## 🏗️ Software Design & Architecture
+## 🏗️ البنية البرمجية للمشروع
 
-The system follows a strict **Object-Oriented Programming (OOP)** methodology packaged within a unified structural pipeline:
+يتبع النظام أسلوب **البرمجة كائنية التوجه (OOP)** بشكل صارم ومُنظم داخل خط تدفق برمي واحد:
 
 ```text
 [run_model]
     │
-    ├──> [prepare_data]  --> Synthesizes uniforms, compiles Bias, creates One-Hot encoding.
-    ├──> [fit]           --> Loops Epochs -> Softmax -> Weight Updates -> Cost Tracking -> Early Stopping.
-    ├──> [accuracy]      --> Computes overall prediction exactness score.
-    ├──> [predict]       --> Evaluates raw inputs, calculates exact continuous probabilities.
-    ├──> [print_info]    --> Flushes clear status logs directly into the terminal console.
-    └──> [draw_data]     --> Generates 2D Meshgrid boundaries & Optimization Decay curves.
+    ├──> [prepare_data]  --> توليد البيانات، دمج الانحياز، وإنشاء مصفوفات الـ One-Hot.
+    ├──> [fit]           --> دورة التدريب -> Softmax -> تحديث الأوزان -> تتبع التكلفة -> التوقف المبكر.
+    ├──> [accuracy]      --> حساب نسبة دقة النموذج الإجمالية.
+    ├──> [predict]       --> استقبال نقطة جديدة وحساب احتمال انتمائها لكل فئة.
+    ├──> [print_info]    --> طباعة تقرير شامل ومنسق فوراً في الـ Terminal.
+    └──> [draw_data]     --> رسم حدود القرار ثنائية الأبعاد ومنحنى هبوط دالة التكلفة.
